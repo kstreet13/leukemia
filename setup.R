@@ -49,13 +49,24 @@ DimPlot(seu, group.by = 'orig.ident')
 tallset <- c(2,5,6,7,8,9,12,13)
 ballset <- c(0,1,3,4,10,11)
 
-tallsub <- seu[, seu$seurat_clusters %in% tallset]
-ballsub <- seu[, seu$seurat_clusters %in% ballset]
+tallcells <- colnames(seu)[which(seu$seurat_clusters %in% tallset)]
+ballcells <- colnames(seu)[which(seu$seurat_clusters %in% ballset)]
 
-tall <- CreateSeuratObject(counts = tallsub@assays$RNA@layers$counts)
-ball <- CreateSeuratObject(counts = ballsub@assays$RNA@layers$counts)
+rm(seu)
 
-rm(seu, tallset, ballset, tallsub, ballsub)
+samp.names <- paste0('YMK',1:6)
+dirs <- paste0('data/',samp.names,'/outs/filtered_feature_bc_matrix/')
+names(dirs) <- samp.names
+
+seu <- Read10X(dirs)
+
+tall <- CreateSeuratObject(counts = seu[,colnames(seu) %in% tallcells])
+ball <- CreateSeuratObject(counts = seu[,colnames(seu) %in% ballcells])
+
+rm(dirs, samp.names, seu)
+
+
+
 
 # %mito
 tall <- PercentageFeatureSet(tall, pattern = "^MT-", col.name = "percent.mt")
