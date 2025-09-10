@@ -23,6 +23,7 @@ data/
 
 # RStudio files
 .Rproj.user/
+leukemia.Rproj
 
 # produced vignettes
 vignettes/*.html

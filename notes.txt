@@ -1,0 +1,26 @@
+2025-09-10
+----------
+Yong-mi Kim (CHLA), Samantha Hurwitz
+Recommendation from Shahab
+Leukemia microenvironment, Wnt signalling
+T/B cell leukemia = decent prognosis unless relapse (10-20%)
+(T-ALL, B-ALL)
+Survival is better in children
+Wnt signaling is up in cancer (beta catenin is central to it)
+TBL1 is downstream, aim to disrupt link with drug
+Relapse patients have higher TBL1
+Drug is in phase 1 clinical trials
+Big question: how does drug really work? How do we achieve apoptosis? What genes are affected?
+Future: would like to use scRNAseq for (2nd) mouse model
+Reviewers wanted a bioinformatician
+Can we integrate ChIP-Seq and RNA-Sequencing?
+# YMK1-3 = T-ALL
+# YMK4-6 = B-ALL
+# first sample = untreated
+# second and third = treated, different timepoints
+# all cells are leukemia cells, won't find different types, just different subpopulations
+# subpopulation dynamics
+Want: DE by treatment
+Samantha will send list of marker genes, make violin plots
+
+
