@@ -42,6 +42,9 @@ mosaicplot(table(ball$myclus, ball$orig.ident), main='Clusters by Sample', col =
 mosaicplot(table(ball$seurat_clusters, ball$orig.ident), main='Clusters by Sample', col = 2:4)
 # col=c('salmon','goldenrod','lightgreen','dodgerblue','purple')
 
+# transposed
+mosaicplot(table(tall$orig.ident,tall$seurat_clusters), main='Samples by Cluster')
+
 # Differential Expression
 markers <- FindAllMarkers(ball, group.by = 'myclus')
 # markers1 <- FindMarkers(ball, ident.1 = 1, ident.2 = 0, group.by = 'myclus')
@@ -148,5 +151,16 @@ text(de2$avg_log2FC[filt], -log10(de2$p_val_adj[filt]), labels = rownames(de2)[f
 dev.off()
 
 
+# 
+# CELL CYCLE SCORING #
+######################
+ccgenes <- c(cc.genes$s.genes,cc.genes$g2m.genes)
+ball <- AddModuleScore(ball, features=list(cycle=ccgenes))
+ball$CellCycleScore <- ball$Cluster1
+
+
+FeaturePlot(ball, 'CellCycleScore')
+boxplot(ball$CellCycleScore ~ ball$seurat_clusters, main='Cell Cycle Score by Cluster',
+        xlab = 'Cluster',ylab='Cell Cycle Score')
 
 

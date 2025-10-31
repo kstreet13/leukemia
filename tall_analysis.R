@@ -26,6 +26,14 @@ interestingGenes <- c('CTNNB1','CD7','CD38','CD44','TCF7','LEF1','RUNX1','BCL11B
 DotPlot(tall, interestingGenes, cluster.idents = TRUE) + RotatedAxis()
 
 
+# new gene list from email
+interestingGenes <- c("CTNNB1","CD7","CD1A","CD34","CD38","CD44","TCF7","LEF1","LMO2","BCL11B","GATA3","EZH2","DNMT3A","TET2","CXCR3","CXCR4")
+
+DotPlot(tall, interestingGenes, cluster.idents = TRUE) + RotatedAxis()
+
+
+
+
 # clusters 11 and maybe 14 are interesting
 
 tall$myclus <- rep(0, ncol(tall))
@@ -37,6 +45,10 @@ DimPlot(tall, group.by = 'myclus')
 mosaicplot(table(tall$myclus, tall$orig.ident), main='Clusters by Sample', col = 2:4)
 mosaicplot(table(tall$seurat_clusters, tall$orig.ident), main='Clusters by Sample', col = 2:4)
 # col=c('salmon',3,'dodgerblue')
+
+# transposed
+mosaicplot(table(tall$orig.ident,tall$seurat_clusters), main='Samples by Cluster')
+
 
 markers2 <- FindMarkers(tall, ident.1 = 2, ident.2 = 0, group.by = 'myclus')
 # volcano
@@ -68,6 +80,9 @@ plot(de1$avg_log2FC[filt], -log10(de1$p_val_adj[filt]), col='white',
      xlab = 'log2 Fold Change', ylab = '-log10 p-value',
      main = 'T-ALL All Cells: 6h - CTRL')
 text(de1$avg_log2FC[filt], -log10(de1$p_val_adj[filt]), labels = rownames(de1)[filt])
+# highlight genes
+highlight <- c('NFKB1','MYC')
+text(de1$avg_log2FC[rownames(de1)%in%highlight], -log10(de1$p_val_adj[rownames(de1)%in%highlight]), labels = rownames(de1)[rownames(de1)%in%highlight], col=2)
 dev.off()
 
 png(filename = '~/Desktop/T-ALL/tall_allCells_24h-ctrl_volcano.png', width = 12, height = 8, units = "in", res = 200)
@@ -76,6 +91,9 @@ plot(de2$avg_log2FC[filt], -log10(de2$p_val_adj[filt]), col='white',
      xlab = 'log2 Fold Change', ylab = '-log10 p-value',
      main = 'T-ALL All Cells: 24h - CTRL')
 text(de2$avg_log2FC[filt], -log10(de2$p_val_adj[filt]), labels = rownames(de2)[filt])
+# highlight genes
+highlight <- c('NFKB1','MYC')
+text(de1$avg_log2FC[rownames(de1)%in%highlight], -log10(de1$p_val_adj[rownames(de1)%in%highlight]), labels = rownames(de1)[rownames(de1)%in%highlight], col=2)
 dev.off()
 
 
@@ -127,5 +145,15 @@ text(de1$avg_log2FC[filt], -log10(de1$p_val_adj[filt]), labels = rownames(de1)[f
 dev.off()
 
 
+# 
+# CELL CYCLE SCORING #
+######################
+ccgenes <- c(cc.genes$s.genes,cc.genes$g2m.genes)
+tall <- AddModuleScore(tall, features=list(cycle=ccgenes))
+tall$CellCycleScore <- tall$Cluster1
 
+
+FeaturePlot(tall, 'CellCycleScore')
+boxplot(tall$CellCycleScore ~ tall$seurat_clusters, main='Cell Cycle Score by Cluster',
+        xlab = 'Cluster',ylab='Cell Cycle Score')
 
