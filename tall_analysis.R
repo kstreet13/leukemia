@@ -2,7 +2,7 @@ require(Seurat)
 
 tall <- readRDS('data/tall.rds')
 
-d1 <- DimPlot(tall, label = TRUE)
+d1 <- DimPlot(tall, label = FALSE)
 d2 <- DimPlot(tall, group.by = 'orig.ident')
 d1 + d2
 
@@ -22,7 +22,9 @@ DotPlot(tall, allmarkers, cluster.idents = TRUE) + RotatedAxis()
 
 
 interestingGenes <- c('CTNNB1','CD7','CD38','CD44','TCF7','LEF1','RUNX1','BCL11B','BIRC5','LMO2','EZH2','TET2','BCL6','TBL1X','JUN','GSK3B','SKP1','RBX1','PTEN','PARP1','PPP1R15A','BRCA1','ABCC1')
+DotPlot(tall, interestingGenes, cluster.idents = TRUE) + RotatedAxis()
 
+interestingGenes <- c('CTNNB1','TBL1X','TCF7','LEF1','BCL11B','GATA3','LMO2','EZH2','DNMT3A','TET2','CXCR4','CXCR3','CD34','CD38','CD44','CD7','CD1A')
 DotPlot(tall, interestingGenes, cluster.idents = TRUE) + RotatedAxis()
 
 
@@ -144,6 +146,14 @@ plot(de1$avg_log2FC[filt], -log10(de1$p_val_adj[filt]), col='white',
 text(de1$avg_log2FC[filt], -log10(de1$p_val_adj[filt]), labels = rownames(de1)[filt])
 dev.off()
 
+# dotplot with top 20 markers (30 have adj_pval = 0)
+interestingGenes <- rownames(de1)[which(de1$p_val_adj == 0)]
+DotPlot(tall, interestingGenes, cluster.idents = TRUE) + RotatedAxis()
+
+x <- de1[which(de1$p_val_adj == 0), ]
+x <- x[order(abs(x$avg_log2FC), decreasing = TRUE), ]
+interestingGenes <- rownames(x)[1:20]
+DotPlot(tall, interestingGenes, cluster.idents = TRUE) + RotatedAxis()
 
 # 
 # CELL CYCLE SCORING #
