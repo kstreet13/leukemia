@@ -2,8 +2,10 @@ require(Seurat)
 
 tall <- readRDS('data/tall.rds')
 
-d1 <- DimPlot(tall, label = FALSE)
-d2 <- DimPlot(tall, group.by = 'orig.ident')
+ind <- sample(nrow(tall))
+
+d1 <- DimPlot(tall[,ind], label = FALSE)
+d2 <- DimPlot(tall[,ind], group.by = 'orig.ident')
 d1 + d2
 
 
